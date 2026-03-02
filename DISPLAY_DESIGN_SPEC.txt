@@ -1,0 +1,194 @@
+==============================================================================
+                   PC1R DISPLAY DESIGN SPECIFICATION
+              Red Lion CR1000 HMI Panel (800x480 display)
+==============================================================================
+
+PROJECT: PC1R.cd32
+MODEL: CR10001000000210 (CR1000-10000)
+PLC: CompactLogix 1769-L30ER at 192.168.16.20
+PANEL IP: 192.168.16.30
+DRIVER: Allen-Bradley L5K Plus Driver
+
+TAGS IMPORTED: 181 data tags from PC1R.L5K
+PAGES CREATED: 3 (Main, IO_Summary, Alarm)
+
+==============================================================================
+                        PAGE 1: MAIN
+==============================================================================
+Purpose: Navigation menu and system time display
+
+Suggested Layout:
+- Title bar: "PC1R CONTROL SYSTEM" (centered, large font)
+- Navigation buttons:
+  * "IO STATUS" button -> Link to IO_Summary page
+  * "ALARMS" button -> Link to Alarm page
+- Date/Time display using built-in clock primitives
+- PLC Communication status indicator
+
+==============================================================================
+                     PAGE 2: IO_SUMMARY
+==============================================================================
+Purpose: Show real-time status of all I/O points
+
+Suggested Layout (4 columns, grouped by module):
+
+--- COLUMN 1: OUTPUTS - Slot 3 (OutputModule3) ---
+Use Multi-State Indicators bound to OutputModule3.DATA.x
+Tag: OutputModule3  (alias for Local:3:O)
+
+Bit 0:  VICES_CLOSE_SOL
+Bit 1:  WALK BEAM UP SOL
+Bit 2:  WALK BEAM FWD SOL
+Bit 3:  MARK HEAD DOWN SOL
+Bit 4:  MARK HEAD FWD SOL
+Bit 5:  MARK HEAD ROD KICKER
+Bit 6:  COUNT
+Bit 7:  POINT ADVANCE SOL
+Bit 8:  CHAMFER ADV SOL
+Bit 9:  AUTO_PILOT_LT
+Bit 10: FAULT_PILOT_LT
+Bit 11: BEACON_PILOT_LT
+Bit 12: MS1 Point Motor Starter
+Bit 13: MS2 Chamfer Motor Starter
+Bit 14: MS3 Coolant Pump Motor Starter
+
+--- COLUMN 2: INPUTS - Slot 1 (InputModule1) ---
+Use Multi-State Indicators bound to InputModule1.DATA.x
+Tag: InputModule1  (alias for Local:1:I)
+
+Bit 0:  ESR (Emergency Stop Relay)
+Bit 1:  MS1 MS2 AUX (Motor Starter Auxiliaries)
+Bit 2:  AUTO STOP PB
+Bit 3:  MS3 AUX (Coolant Pump Aux)
+Bit 4:  Auto/Manual Selector Switch
+Bit 5:  AUTO START PB
+Bit 6:  POINT MANUAL PB
+Bit 7:  CHAMFER MANUAL PB
+Bit 8:  VICES_CLOSE_PB
+Bit 9:  VICES_OPEN_PB
+
+--- COLUMN 3: INPUTS - Slot 2 (InputModule2) ---
+Use Multi-State Indicators bound to InputModule2.DATA.x
+Tag: InputModule2  (alias for Local:2:I)
+
+Bit 0:  PROX1 (Rod In Position to Clamp)
+Bit 1:  PROX2 (Rod In Position to Mark)
+Bit 2:  PROX3 (Vice 1 Is Open)
+Bit 3:  VICES CLOSED PROXES (Vice 1 & 2 Series)
+Bit 4:  PROX4 (Vice 2 Is Open)
+Bit 5:  RESET PB (ESR/Fault Reset)
+Bit 6:  LS1 (Point Depth Limit)
+Bit 7:  COOLANT ON SW
+Bit 8:  LS3 (Chamfer Depth Limit)
+Bit 9:  HEADS ON SW
+Bit 10: INDEX PB
+Bit 11: LS5 (Mark Head Home LS)
+Bit 12: LS6 (Mark Head Not Up LS)
+Bit 13: SW2 P&C ONLY
+Bit 14: SW2 STAMP ONLY
+Bit 15: STAMP PB
+
+--- COLUMN 4: INPUTS - Slot 4 (InputModule4) ---
+Use Multi-State Indicators bound to InputModule4.DATA.x
+Tag: InputModule4  (alias for Local:4:I)
+
+Bit 0:  BEAM1 UP FB
+Bit 1:  BEAM1 DOWN FB
+Bit 2:  BEAM1 FWD FB
+Bit 3:  BEAM1 HOME FB
+Bit 4:  BEAM2 UP FB
+Bit 5:  BEAM2 DOWN FB
+Bit 6:  BEAM2 FWD FB
+Bit 7:  BEAM2 HOME FB
+
+DESIGN NOTES:
+- Use green/red Multi-State Indicators (green=ON, red=OFF) for each bit
+- Place a text label next to each indicator with the description
+- Group by module with section headers
+- Add "Back" button to return to Main page
+
+HOW TO BUILD IN CRIMSON 3.2:
+1. Open the IO_Summary page in page editor (double-click)
+2. From Resource Pane > Primitives tab, drag "Multi-State Indicator" onto page
+3. Double-click the indicator to configure:
+   - State 0 (OFF): Red color
+   - State 1 (ON): Green color
+   - Data tag: Select the appropriate tag (e.g., OutputModule3.DATA.0)
+4. Add a text label next to each indicator (Text menu > Add, or drag text primitive)
+5. Copy/paste indicators for efficiency, just change the tag binding
+
+==============================================================================
+                      PAGE 3: ALARM
+==============================================================================
+Purpose: Display fault/alarm conditions from N7 integer array
+
+Tag: N7 (INT[10] array - 25 fault bits)
+
+--- N7[0] FAULTS (Bits 0-15) ---
+Bit 0:  VICE FAIL 2 CLOSE Fault
+Bit 1:  Point/Chamfer Motor Overload (MS1/MS2 TRIP)
+Bit 3:  Coolant Overload Starter Failure (MS3)
+Bit 4:  VICE1 FAIL 2 OPEN Fault
+Bit 5:  Stamp Not Home Fault
+Bit 6:  Stamp Down Fault
+Bit 7:  Beam 1 Not Down Fault
+Bit 8:  Beam 2 Not Down Fault
+Bit 9:  Beam 1 Up Fault
+Bit 10: Beam 2 Up Fault
+Bit 11: Beam 1 Not Down Fault
+Bit 12: Beam 2 Not Down Fault
+Bit 13: Beam 1 Not Up Fault
+Bit 14: Beam 2 Not Up Fault
+Bit 15: Beam 1 Not Home Fault
+
+--- N7[1] FAULTS (Bits 0-8) ---
+Bit 0:  Beam 2 Not Home Fault
+Bit 1:  Beam 1 Forward Fault
+Bit 2:  Beam 2 Forward Fault
+Bit 3:  Beam 1 Not Forward Fault
+Bit 4:  Beam 2 Not Forward Fault
+Bit 5:  Beam 1 Home Fault
+Bit 6:  Beam 2 Home Fault
+Bit 7:  No Rods Fault
+Bit 8:  VICE2 FAIL 2 OPEN Fault
+
+--- N7[3] and N7[4] ---
+N7[3]: Month Saved
+N7[4]: Day Saved
+
+ALARM PAGE DESIGN OPTIONS:
+
+OPTION A - Multi-State Indicators (like IO page):
+- Use red/green indicators with fault description text
+- Red = fault active, Green/dark = no fault
+- Tag binding: N7[0].0 through N7[0].15, N7[1].0 through N7[1].8
+
+OPTION B - Built-in Alarm List (RECOMMENDED):
+1. Go to Data Tags > PLC1 > Controller_Tags > N7
+2. Right-click each bit (N7[0].0, etc.) and configure as Alarm Tag
+3. Set alarm description to the fault text listed above
+4. On the Alarm page, drag the "Alarm List" primitive from Primitives tab
+5. The Alarm List automatically shows all active alarms with timestamps
+
+HOW TO CONFIGURE ALARM TAGS:
+1. Navigate to Data Tags > PLC1 > expand N7
+2. For each N7 element, set:
+   - Trigger: When bit = 1
+   - Description: The fault description text
+   - Priority: Critical (for safety-related), Warning (for others)
+3. The built-in Alarm List primitive will display all triggered alarms
+
+==============================================================================
+                    NAVIGATION LINKS
+==============================================================================
+Each page should have navigation buttons:
+- Main page: Buttons to IO_Summary and Alarm pages
+- IO_Summary: "Back" button to Main, "Alarms" button to Alarm page
+- Alarm page: "Back" button to Main, "IO Status" button to IO_Summary
+
+To create a page link button:
+1. Place a Rectangle primitive
+2. Add text label ("IO STATUS", "ALARMS", "BACK")
+3. Configure Behavior > Go To Page > Select target page
+
+==============================================================================
