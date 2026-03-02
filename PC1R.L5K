@@ -1,0 +1,1044 @@
+﻿(*********************************************
+
+  Import-Export
+  Version   := RSLogix 5000 v20.05
+  Owner     := Galvan, 
+  Exported  := Mon Mar 02 07:29:10 2026
+
+  Note:  File encoded in UTF-8.  Only edit file in a program 
+         which supports UTF-8 (like Notepad, not Wordpad).
+
+**********************************************)
+IE_VER := 2.11;
+
+CONTROLLER PC (ProcessorType := "1769-L30ER",
+               Major := 20,
+               CompatibilityMode := V20.01,
+               TimeSlice := 20,
+               ShareUnusedTimeSlice := 1,
+               RedundancyEnabled := 0,
+               KeepTestEditsOnSwitchOver := 0,
+               DataTablePadPercentage := 50,
+               SecurityCode := 0,
+               ChangesToDetect := 16#ffff_ffff_ffff_ffff,
+               SFCExecutionControl := "CurrentActive",
+               SFCRestartPosition := "MostRecent",
+               SFCLastScan := "DontScan",
+               SerialNumber := 16#70bc_a698,
+               MatchProjectToController := No,
+               CanUseRPIFromProducer := No,
+               InhibitAutomaticFirmwareUpdate := 0)
+	DATATYPE DateTime_Type (Description := "Structure for the DateTime from the Controller wallclock accessed by the GSV/SSV instruction",
+	                        FamilyType := NoFamily)
+		DINT Year;
+		DINT Month (Description := "The month (1 - 12)");
+		DINT Day (Description := "The day (1 - 31)");
+		DINT Hour (Description := "hour (0 - 23)");
+		DINT Minute (Description := "minute (0 - 59)");
+		DINT Second (Description := "second (0 - 59)");
+		DINT Microseconds (Description := "(0 - 999,999)");
+	END_DATATYPE
+
+	DATATYPE DOW_Test (FamilyType := NoFamily)
+		DINT Year;
+		DINT Month;
+		DINT Day;
+		DINT DOW;
+	END_DATATYPE
+
+	DATATYPE Runtime_Structure (FamilyType := NoFamily)
+		SINT ZZZZZZZZZZRuntime_St0 (Hidden := 1);
+		BIT Running ZZZZZZZZZZRuntime_St0 : 0;
+		DINT Minutes;
+		DINT Day;
+		SINT ZZZZZZZZZZRuntime_St4 (Hidden := 1);
+		BIT Reset ZZZZZZZZZZRuntime_St4 : 0;
+		DINT CurrentRunMinutes;
+		DINT Yesterday;
+		DINT Month_Total;
+		DINT Last_Month_Total;
+	END_DATATYPE
+
+	MODULE Local (Parent := "Local",
+	              ParentModPortId := 1,
+	              CatalogNumber := "1769-L30ER",
+	              Vendor := 1,
+	              ProductType := 14,
+	              ProductCode := 106,
+	              Major := 20,
+	              Minor := 19,
+	              PortLabel := "RxBACKPLANE",
+	              ChassisSize := 9,
+	              Slot := 0,
+	              Mode := 2#0000_0000_0000_0001,
+	              CompatibleModule := 0,
+	              KeyMask := 2#0000_0000_0000_0000)
+	END_MODULE
+
+	MODULE Input1_120VAC (Description := "These Inputs represent those that wereon the Micrologix1100 CPU its self",
+	                      Parent := "Local",
+	                      ParentModPortId := 1,
+	                      CatalogNumber := "1769-IA16/A",
+	                      Vendor := 1,
+	                      ProductType := 7,
+	                      ProductCode := 82,
+	                      Major := 3,
+	                      Minor := 1,
+	                      PortLabel := "RxBACKPLANE",
+	                      Slot := 1,
+	                      CommMethod := 536870913,
+	                      Mode := 2#0000_0000_0000_0001,
+	                      CompatibleModule := 1,
+	                      KeyMask := 2#0000_0000_0001_1111)
+			ExtendedProp := [[[___<public><ConfigID>250</ConfigID><CatNum>1769-IA16</CatNum></public>___]]]
+			ConfigData := [8,102,1];
+			CONNECTION Input (Rate := 20000,
+			                  EventID := 0)
+					InputData (COMMENT.DATA.0 := "ESR Emergency Stop Relay Input",
+            COMMENT.DATA.1 := "MS1 MS2 AUX Point & Chamfer Motor Starter Auxiliaries In Series",
+            COMMENT.DATA.2 := "AUTO STOP PB Operator Auto Stop PB",
+            COMMENT.DATA.3 := "MS3 AUX Coolant Pump Motor Starter Auxiliary",
+            COMMENT.DATA.4 := "Auto Manual Selector Switch$NManual_Selected",
+            COMMENT.DATA.5 := "AUTO START PB",
+            COMMENT.DATA.6 := "POINT MANUAL PB",
+            COMMENT.DATA.7 := "CHAMFER MANUAL PB",
+            COMMENT.DATA.8 := "VICES_CLOSE_PB",
+            COMMENT.DATA.9 := "VICES_OPEN_PB") := [0,0];
+					InputForceData := [0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0];
+			END_CONNECTION
+
+	END_MODULE
+
+	MODULE Input2_120VAC (Parent := "Local",
+	                      ParentModPortId := 1,
+	                      CatalogNumber := "1769-IA16/A",
+	                      Vendor := 1,
+	                      ProductType := 7,
+	                      ProductCode := 82,
+	                      Major := 3,
+	                      Minor := 1,
+	                      PortLabel := "RxBACKPLANE",
+	                      Slot := 2,
+	                      CommMethod := 536870913,
+	                      Mode := 2#0000_0000_0000_0001,
+	                      CompatibleModule := 1,
+	                      KeyMask := 2#0000_0000_0001_1111)
+			ExtendedProp := [[[___<public><ConfigID>250</ConfigID><CatNum>1769-IA16</CatNum></public>___]]]
+			ConfigData := [8,102,1];
+			CONNECTION Input (Rate := 20000,
+			                  EventID := 0)
+					InputData (COMMENT.DATA.0 := "PROX1 Rod In Position to Clamp",
+            COMMENT.DATA.1 := "PROX2 Rod In Position to Mark",
+            COMMENT.DATA.2 := "PROX3 Vice 1 Is Opeen",
+            COMMENT.DATA.3 := "VICES CLOSED PROXES Vices Closed Prox Vice 1 & Prox Vice 2 Wired In Series",
+            COMMENT.DATA.4 := "PROX4 Vice 2 Is Open",
+            COMMENT.DATA.5 := "RESET PB ESR / Fault Reset Button",
+            COMMENT.DATA.6 := "LS1 Point Depth Limit Switch",
+            COMMENT.DATA.7 := "COOLANT ON SW Coolant On Switch",
+            COMMENT.DATA.8 := "LS3 Chamfer Depth Limit Switch",
+            COMMENT.DATA.9 := "HEADS ON SW Cutting Heads On Switch",
+            COMMENT.DATA.10 := "INDEX PB Operator Index PB",
+            COMMENT.DATA.11 := "LS5 Marking Head Home Limit Switch",
+            COMMENT.DATA.12 := "LS6 Marking Head Not Up Limit Switch",
+            COMMENT.DATA.13 := "SW2 P AND C ONLY Point and Chamfer Only No Stamping",
+            COMMENT.DATA.14 := "SW2 STAMP ONLY",
+            COMMENT.DATA.15 := "STAMP PB") := [0,0];
+					InputForceData := [0,0,0,0,0,0,0,0,0,0,0,0,32,0,0,0,0,0,0,0,0,0,0,0];
+			END_CONNECTION
+
+	END_MODULE
+
+	MODULE Output1_RLY (Parent := "Local",
+	                    ParentModPortId := 1,
+	                    CatalogNumber := "1769-OW16/A",
+	                    Vendor := 1,
+	                    ProductType := 7,
+	                    ProductCode := 85,
+	                    Major := 3,
+	                    Minor := 1,
+	                    PortLabel := "RxBACKPLANE",
+	                    Slot := 3,
+	                    CommMethod := 536870913,
+	                    Mode := 2#0000_0000_0000_0001,
+	                    CompatibleModule := 1,
+	                    KeyMask := 2#0000_0000_0001_1111)
+			ExtendedProp := [[[___<public><ConfigID>150</ConfigID><CatNum>1769-OW16</CatNum></public>___]]]
+			ConfigData  := [18,102,1,0,0,0,0,0];
+			CONNECTION Output (Rate := 20000,
+			                   EventID := 0)
+					InputData  := [0,1024];
+					InputForceData := [0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+					OutputData (COMMENT.DATA.0 := "VICES_CLOSE_SOL",
+            COMMENT.DATA.1 := "WALK BEAM UP SOL Walking Beam UpSolenoid",
+            COMMENT.DATA.2 := "WALK BEAM FWD SOL Walking Beam Forward Solenoid",
+            COMMENT.DATA.3 := "MARK HEAD DOWN SOL Marking Head Down Solenoid",
+            COMMENT.DATA.4 := "MARK HEAD FWD SOL Marking Head Forward Solenoid",
+            COMMENT.DATA.5 := "MARK HEAD ROD KICKER",
+            COMMENT.DATA.6 := "COUNT",
+            COMMENT.DATA.7 := "POINT ADVANCE SOL",
+            COMMENT.DATA.8 := "CHAMFER ADV SOLChamfer Advance Solenoid",
+            COMMENT.DATA.9 := "AUTO_PILOT_LT",
+            COMMENT.DATA.10 := "FAULT_PILOT_LT",
+            COMMENT.DATA.11 := "BEACON_PILOT_LT",
+            COMMENT.DATA.12 := "MS1 Point Motor StarterCoil",
+            COMMENT.DATA.13 := "MS2 Chamfer MotorStarter Coil",
+            COMMENT.DATA.14 := "MS3 Coolant Pump MotorStarter Coil") := [1024];
+					OutputForceData := [0,0,0,0,0,0,0,0,0,0,0,0];
+			END_CONNECTION
+
+	END_MODULE
+
+	MODULE Input3_24VDC (Parent := "Local",
+	                     ParentModPortId := 1,
+	                     CatalogNumber := "1769-IQ16/A",
+	                     Vendor := 1,
+	                     ProductType := 7,
+	                     ProductCode := 67,
+	                     Major := 3,
+	                     Minor := 1,
+	                     PortLabel := "RxBACKPLANE",
+	                     Slot := 4,
+	                     CommMethod := 536870913,
+	                     Mode := 2#0000_0000_0000_0001,
+	                     CompatibleModule := 1,
+	                     KeyMask := 2#0000_0000_0001_1111)
+			ExtendedProp := [[[___<public><ConfigID>250</ConfigID><CatNum>1769-IQ16</CatNum></public>___]]]
+			ConfigData := [8,102,1];
+			CONNECTION Input (Rate := 20000,
+			                  EventID := 0)
+					InputData (COMMENT.DATA.0 := "BEAM1 UP FB",
+            COMMENT.DATA.1 := "BEAM1 DOWN FB",
+            COMMENT.DATA.2 := "BEAM1 FWD FB",
+            COMMENT.DATA.3 := "BEAM1 HOME FB",
+            COMMENT.DATA.4 := "BEAM2 UP FB",
+            COMMENT.DATA.5 := "BEAM2 DOWN FB",
+            COMMENT.DATA.6 := "BEAM2 FWD FB",
+            COMMENT.DATA.7 := "BEAM2 HOME FB") := [0,0];
+					InputForceData := [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+			END_CONNECTION
+
+	END_MODULE
+
+	MODULE AnalogInput1 (Parent := "Local",
+	                     ParentModPortId := 1,
+	                     CatalogNumber := "1769-IF4I/A",
+	                     Vendor := 1,
+	                     ProductType := 10,
+	                     ProductCode := 44,
+	                     Major := 2,
+	                     Minor := 1,
+	                     PortLabel := "RxBACKPLANE",
+	                     Slot := 5,
+	                     CommMethod := 536870913,
+	                     Mode := 2#0000_0000_0000_0000,
+	                     CompatibleModule := 1,
+	                     KeyMask := 2#0000_0000_0001_1111)
+			ExtendedProp := [[[___<public><ConfigID>130</ConfigID></public>___]]]
+			ConfigData  := [60,102,1,100,0,0,-128,2,1,0,0,0,0,0,-128,2,1,0,0,0,0,0,-128,2,1,0,0,0,0,0,-128,2,1,0,0,0,0];
+			CONNECTION Output (Rate := 80000,
+			                   EventID := 0)
+					InputData  := [0,10500,10500,10500,10500,0,15,0,17,17];
+					InputForceData := [0,0,0,0,4,41,4,41,4,41,4,41,0,0,15,0,17,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+					OutputData  := [0];
+					OutputForceData := [0,0,0,0,0,0,0,0,0,0,0,0];
+			END_CONNECTION
+
+	END_MODULE
+
+	MODULE M1_Point_Motor1 (Parent := "Local",
+	                        ParentModPortId := 2,
+	                        CatalogNumber := "193-ECM-ETR/A",
+	                        Vendor := 1,
+	                        ProductType := 3,
+	                        ProductCode := 651,
+	                        Major := 6,
+	                        Minor := 1,
+	                        PortLabel := "ENet",
+	                        Mode := 2#0000_0000_0000_0100,
+	                        CompatibleModule := 1,
+	                        KeyMask := 2#0000_0000_0001_1111)
+			ExtendedProp := [[[___<public><Vendor>Rockwell Automation/Allen-Bradley</Vendor><CatNum>193-ECM-ETR</CatNum><ControlModuleType>2</ControlModuleType><ControlModuleMismatchTripEn>2</ControlModuleMismatchTripEn><SensingModuleType>5</SensingModuleType><SensingModuleMismatchTripEn>2</SensingModuleMismatchTripEn><Digital1Type>0</Digital1Type><Digital1MismatchTripEn>2</Digital1MismatchTripEn><Digital2Type>0</Digital2Type><Digital2MismatchTripEn>2</Digital2MismatchTripEn><Digital3Type>0</Digital3Type><Digital3MismatchTripEn>2</Digital3MismatchTripEn><Digital4Type>0</Digital4Type><Digital4MismatchTripEn>2</Digital4MismatchTripEn><Analog1Type>0</Analog1Type><Analog1MismatchTripEn>2</Analog1MismatchTripEn><Analog2Type>0</Analog2Type><Analog2MismatchTripEn>2</Analog2MismatchTripEn><Analog3Type>0</Analog3Type><Analog3MismatchTripEn>2</Analog3MismatchTripEn><Analog4Type>0</Analog4Type><Analog4MismatchTripEn>2</Analog4MismatchTripEn><OperatorStationType>0</OperatorStationType><OperatorStationMismatchTripEn>2</OperatorStationMismatchTripEn><UserDefinedData0>2</UserDefinedData0><UserDefinedData1>3</UserDefinedData1><UserDefinedData2>28</UserDefinedData2><UserDefinedData3>29</UserDefinedData3><UserDefinedData4>30</UserDefinedData4><UserDefinedData5>31</UserDefinedData5><UserDefinedData6>38</UserDefinedData6><UserDefinedData7>39</UserDefinedData7><OperatingMode>2</OperatingMode><Pt00OutputFunction>1</Pt00OutputFunction><Pt01OutputFunction>0</Pt01OutputFunction><Pt02OutputFunction>0</Pt02OutputFunction><ConfigID>600</ConfigID></public>___]]]
+			ConfigData  := [412,120,0,2,2,50,50,10,18,75,85,[3,0,0,0,0,0,8649,256,0,0],[-1,-1,63,63,4095,4095,26623,8191,4095,4095],4095,2,5,0,32,0,0,2
+		,0,600,0,0,500,10000,100,1,10,5,0,250,200,0,10,10,0,600,10,50,250,150,10,50,50,70,10,50,35,20,5,5,10,10,35,40,10,35,40,10
+		,35,40,10,10,100,90,10,100,90,10,100,90,10,10,10,10,[2,3,28,29,30,31,38,39],0,0,-1,480,480,0,10,10,10,1000,4000,10,10,5000
+		,4900,10,10,15,10,10,10,57,58,10,10,63,62,15,1,10,10,10,10,0,0,0,0,10,10,10,10,0,0,0,0,10,10,10,10,0,0,0,0,10,10,10,10,0,0,0,0,10
+		,10,-90,-95,10,10,-95,-90,10,10,90,95,10,10,95,90,1,50,2,3,51,52,38,39,300,0,[10,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0],[10,10,10,0,0,0,0,0
+		,0,0,0,0,0,0,0,0],[10,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0],[10,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0]];
+			ConfigScript (Size := 468) := [-48,1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,-66,1,0,0,11,1,0,0,0,1,0,0,0,2,0,0,0,-96,1,0,0,16,3,32,4,36,120,48,3,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,-72,12,0,0,8,0,0,0,72,0,0,0,0,0];
+			CONNECTION Standard (Rate := 100000,
+			                     InputSize := 156,
+			                     OutputSize := 8,
+			                     EventID := 0,
+			                     Priority := Scheduled,
+			                     InputConnectionType := Unicast,
+			                     InputProductionTrigger := Cyclic,
+			                     ConnectionPath := "20 04 24 78 2c 90 2c c7",
+			                     InputTagSuffix := "I",
+			                     OutputTagSuffix := "O")
+					InputData (COMMENT.READY := "HMI Panel M1 Motor Overload Ready Input") := [-1,0,0,0,0,0,0,[0,0,0,0,0,0,0,0,0,0,0,0],0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,[0,0,0,0,0,0,0,0],0,0,[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+					InputForceData := [-1,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+					OutputData (COMMENT.TRIPRESET := "HMI Panel M1 Motor Overload Reset Output") := [0,0,0,0];
+					OutputForceData := [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+			END_CONNECTION
+
+	END_MODULE
+
+	MODULE M2_Chamfer_Motor (Parent := "Local",
+	                         ParentModPortId := 2,
+	                         CatalogNumber := "193-ECM-ETR/A",
+	                         Vendor := 1,
+	                         ProductType := 3,
+	                         ProductCode := 651,
+	                         Major := 6,
+	                         Minor := 1,
+	                         PortLabel := "ENet",
+	                         NodeAddress := "192.168.16.101",
+	                         Mode := 2#0000_0000_0000_0100,
+	                         CompatibleModule := 1,
+	                         KeyMask := 2#0000_0000_0001_1111)
+			ExtendedProp := [[[___<public><Vendor>Rockwell Automation/Allen-Bradley</Vendor><CatNum>193-ECM-ETR</CatNum><ControlModuleType>2</ControlModuleType><ControlModuleMismatchTripEn>2</ControlModuleMismatchTripEn><SensingModuleType>5</SensingModuleType><SensingModuleMismatchTripEn>2</SensingModuleMismatchTripEn><Digital1Type>0</Digital1Type><Digital1MismatchTripEn>2</Digital1MismatchTripEn><Digital2Type>0</Digital2Type><Digital2MismatchTripEn>2</Digital2MismatchTripEn><Digital3Type>0</Digital3Type><Digital3MismatchTripEn>2</Digital3MismatchTripEn><Digital4Type>0</Digital4Type><Digital4MismatchTripEn>2</Digital4MismatchTripEn><Analog1Type>0</Analog1Type><Analog1MismatchTripEn>2</Analog1MismatchTripEn><Analog2Type>0</Analog2Type><Analog2MismatchTripEn>2</Analog2MismatchTripEn><Analog3Type>0</Analog3Type><Analog3MismatchTripEn>2</Analog3MismatchTripEn><Analog4Type>0</Analog4Type><Analog4MismatchTripEn>2</Analog4MismatchTripEn><OperatorStationType>0</OperatorStationType><OperatorStationMismatchTripEn>2</OperatorStationMismatchTripEn><UserDefinedData0>2</UserDefinedData0><UserDefinedData1>3</UserDefinedData1><UserDefinedData2>28</UserDefinedData2><UserDefinedData3>29</UserDefinedData3><UserDefinedData4>30</UserDefinedData4><UserDefinedData5>31</UserDefinedData5><UserDefinedData6>38</UserDefinedData6><UserDefinedData7>39</UserDefinedData7><OperatingMode>2</OperatingMode><Pt00OutputFunction>1</Pt00OutputFunction><Pt01OutputFunction>0</Pt01OutputFunction><Pt02OutputFunction>0</Pt02OutputFunction><ConfigID>600</ConfigID></public>___]]]
+			ConfigData  := [412,120,0,2,2,50,50,10,18,75,85,[3,0,0,0,0,0,8649,256,0,0],[-1,-1,63,63,4095,4095,26623,8191,4095,4095],4095,2,5,0,32,0,0,2
+		,0,600,0,0,500,10000,100,1,10,5,0,250,200,0,10,10,0,600,10,50,250,150,10,50,50,70,10,50,35,20,5,5,10,10,35,40,10,35,40,10
+		,35,40,10,10,100,90,10,100,90,10,100,90,10,10,10,10,[2,3,28,29,30,31,38,39],0,0,-1,480,480,0,10,10,10,1000,4000,10,10,5000
+		,4900,10,10,15,10,10,10,57,58,10,10,63,62,15,1,10,10,10,10,0,0,0,0,10,10,10,10,0,0,0,0,10,10,10,10,0,0,0,0,10,10,10,10,0,0,0,0,10
+		,10,-90,-95,10,10,-95,-90,10,10,90,95,10,10,95,90,1,50,2,3,51,52,38,39,300,0,[10,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0],[10,10,10,0,0,0,0,0
+		,0,0,0,0,0,0,0,0],[10,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0],[10,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0]];
+			ConfigScript (Size := 468) := [-48,1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,-66,1,0,0,11,1,0,0,0,1,0,0,0,2,0,0,0,-96,1,0,0,16,3,32,4,36,120,48,3,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,-72,12,0,0,8,0,0,0,72,0,0,0,0,0];
+			CONNECTION Standard (Rate := 100000,
+			                     InputSize := 156,
+			                     OutputSize := 8,
+			                     EventID := 0,
+			                     Priority := Scheduled,
+			                     InputConnectionType := Unicast,
+			                     InputProductionTrigger := Cyclic,
+			                     ConnectionPath := "20 04 24 78 2c 90 2c c7",
+			                     InputTagSuffix := "I",
+			                     OutputTagSuffix := "O")
+					InputData  := [-1,0,0,0,0,0,0,[0,0,0,0,0,0,0,0,0,0,0,0],0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,[0,0,0,0,0,0,0,0],0,0,[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+					InputForceData := [-1,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+					OutputData  := [0,0,0,0];
+					OutputForceData := [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+			END_CONNECTION
+
+	END_MODULE
+
+	ADD_ON_INSTRUCTION_DEFINITION Machine_Time (Revision := "1.0",
+	                                            ExecutePrescan := No,
+	                                            ExecutePostscan := No,
+	                                            ExecuteEnableInFalse := No,
+	                                            CreatedDate := "2026-02-23T19:36:03.949Z",
+	                                            CreatedBy := "PLATERLAPTOP\Galvan",
+	                                            EditedDate := "2026-02-24T12:05:45.340Z",
+	                                            EditedBy := "PLATERLAPTOP\Galvan",
+	                                            SoftwareRevision := "v20.05")
+		
+		PARAMETERS
+			EnableIn : BOOL (Description := "Enable Input - System Defined Parameter",
+			                    Usage := Input,
+			                    RADIX := Decimal,
+			                    Required := No,
+			                    Visible := No,
+			                    ExternalAccess := Read Only);
+			EnableOut : BOOL (Description := "Enable Output - System Defined Parameter",
+			                     Usage := Output,
+			                     RADIX := Decimal,
+			                     Required := No,
+			                     Visible := No,
+			                     ExternalAccess := Read Only);
+			MachineRun : BOOL (Usage := Input,
+			                      RADIX := Decimal,
+			                      Required := Yes,
+			                      Visible := Yes,
+			                      DefaultData := 0);
+			ClockMinutes : DINT (Usage := Input,
+			                        RADIX := Decimal,
+			                        Required := Yes,
+			                        Visible := Yes,
+			                        ExternalAccess := Read Only,
+			                        DefaultData := 0);
+			ClockDay : DINT (Usage := Input,
+			                    RADIX := Decimal,
+			                    Required := Yes,
+			                    Visible := Yes,
+			                    DefaultData := 0);
+			ClockMonth : DINT (Usage := Input,
+			                      RADIX := Decimal,
+			                      Required := Yes,
+			                      Visible := Yes,
+			                      DefaultData := 0);
+			Reset : BOOL (Usage := Input,
+			                 RADIX := Decimal,
+			                 Required := Yes,
+			                 Visible := Yes,
+			                 DefaultData := 0);
+			CurrentRunMinutes : DINT (Usage := Output,
+			                             RADIX := Decimal,
+			                             Required := Yes,
+			                             Visible := Yes,
+			                             ExternalAccess := Read Only,
+			                             DefaultData := 0);
+			YesterdayRunMinutes : DINT (Usage := Output,
+			                               RADIX := Decimal,
+			                               Required := Yes,
+			                               Visible := Yes,
+			                               ExternalAccess := Read Only,
+			                               DefaultData := 0);
+			isMonthRunMinutes : DINT (Usage := Output,
+			                             RADIX := Decimal,
+			                             Required := Yes,
+			                             Visible := Yes,
+			                             ExternalAccess := Read Only,
+			                             DefaultData := 0);
+			LastMonthRunMinutes : DINT (Usage := Output,
+			                               RADIX := Decimal,
+			                               Required := Yes,
+			                               Visible := Yes,
+			                               ExternalAccess := Read Only,
+			                               DefaultData := 0);
+		END_PARAMETERS
+
+		LOCAL_TAGS
+			ResetMem : BOOL (RADIX := Decimal,
+			                   ExternalAccess := None,
+			                   DefaultData := 0);
+			DeltaMin : DINT (RADIX := Decimal,
+			                   ExternalAccess := None,
+			                   DefaultData := 0);
+			PrevMonth : DINT (RADIX := Decimal,
+			                    ExternalAccess := None,
+			                    DefaultData := 0);
+			PrevDay : DINT (RADIX := Decimal,
+			                  ExternalAccess := None,
+			                  DefaultData := 0);
+			PrevMin : DINT (RADIX := Decimal,
+			                  ExternalAccess := None,
+			                  DefaultData := 0);
+			InitDone : BOOL (RADIX := Decimal,
+			                   ExternalAccess := None,
+			                   DefaultData := 0);
+		END_LOCAL_TAGS
+
+		ST_ROUTINE Logic 
+			'(*
+			'  AOI ST Routine - corrected for Logix v20 BOOL handling:
+			'  - Use 1/0 for BOOL assignments
+			'  - Do NOT compare BOOLs to 1/0 in IF expressions
+			'
+			'  INPUT parameters (exact):
+			'    MachineRun : BOOL
+			'    ClockMinutes : DINT
+			'    ClockDay : DINT
+			'    ClockMonth : DINT
+			'    Reset : BOOL
+			'
+			'  OUTPUT parameters (exact):
+			'    CurrentRunMinutes : DINT
+			'    YesterdayRunMinutes : DINT
+			'    isMonthRunMinutes : DINT
+			'    LastMonthRunMinutes : DINT
+			'
+			'  Local Tags required (exact):
+			'    InitDone : BOOL
+			'    PrevMin : DINT
+			'    PrevDay : DINT
+			'    PrevMonth : DINT
+			'    DeltaMin : DINT
+			'    ResetMem : BOOL
+			'*)
+			'
+			'(* ---------- Initialization ---------- *)
+			'IF NOT InitDone THEN
+			'
+			'    PrevMin := ClockMinutes;
+			'    PrevDay := ClockDay;
+			'    PrevMonth := ClockMonth;
+			'
+			'    CurrentRunMinutes := 0;
+			'    YesterdayRunMinutes := 0;
+			'    isMonthRunMinutes := 0;
+			'    LastMonthRunMinutes := 0;
+			'
+			'    ResetMem := Reset;
+			'    InitDone := 1;
+			'
+			'END_IF;
+			'
+			'
+			'(* ---------- Reset Rising Edge ---------- *)
+			'IF (Reset AND NOT ResetMem) THEN
+			'
+			'    CurrentRunMinutes := 0;
+			'    YesterdayRunMinutes := 0;
+			'    isMonthRunMinutes := 0;
+			'    LastMonthRunMinutes := 0;
+			'
+			'    (* Reseed previous clock values to prevent a big delta after reset *)
+			'    PrevMin := ClockMinutes;
+			'    PrevDay := ClockDay;
+			'    PrevMonth := ClockMonth;
+			'
+			'END_IF;
+			'
+			'ResetMem := Reset;
+			'
+			'
+			'(* ---------- Month Change ---------- *)
+			'IF (ClockMonth <> PrevMonth) THEN
+			'
+			'    LastMonthRunMinutes := isMonthRunMinutes;
+			'    isMonthRunMinutes := 0;
+			'
+			'    PrevMonth := ClockMonth;
+			'
+			'END_IF;
+			'
+			'
+			'(* ---------- Day Change ---------- *)
+			'IF (ClockDay <> PrevDay) THEN
+			'
+			'    YesterdayRunMinutes := CurrentRunMinutes;
+			'    CurrentRunMinutes := 0;
+			'
+			'    PrevDay := ClockDay;
+			'
+			'END_IF;
+			'
+			'
+			'(* ---------- Minute Tick / Accumulation ---------- *)
+			'IF (ClockMinutes <> PrevMin) THEN
+			'
+			'    (* Minutes advanced since last scan; handle midnight wrap *)
+			'    DeltaMin := ClockMinutes - PrevMin;
+			'    IF (DeltaMin < 0) THEN
+			'        DeltaMin := DeltaMin + 1440;
+			'    END_IF;
+			'
+			'    (* Optional clamp against clock adjustments *)
+			'    IF (DeltaMin > 60) THEN
+			'        DeltaMin := 1;
+			'    END_IF;
+			'
+			'    IF MachineRun THEN
+			'        CurrentRunMinutes := CurrentRunMinutes + DeltaMin;
+			'        isMonthRunMinutes := isMonthRunMinutes + DeltaMin;
+			'    END_IF;
+			'
+			'    PrevMin := ClockMinutes;
+			'
+			'END_IF;
+		END_ST_ROUTINE
+
+	END_ADD_ON_INSTRUCTION_DEFINITION
+
+	ADD_ON_INSTRUCTION_DEFINITION Program_Flasher (Revision := "1.0",
+	                                               ExecutePrescan := No,
+	                                               ExecutePostscan := No,
+	                                               ExecuteEnableInFalse := No,
+	                                               CreatedDate := "2026-02-24T13:56:47.380Z",
+	                                               CreatedBy := "PLATERLAPTOP\Galvan",
+	                                               EditedDate := "2026-02-24T14:03:21.137Z",
+	                                               EditedBy := "PLATERLAPTOP\Galvan",
+	                                               SoftwareRevision := "v20.05")
+		
+		PARAMETERS
+			EnableIn : BOOL (Description := "Enable Input - System Defined Parameter",
+			                    Usage := Input,
+			                    RADIX := Decimal,
+			                    Required := No,
+			                    Visible := No,
+			                    ExternalAccess := Read Only);
+			EnableOut : BOOL (Description := "Enable Output - System Defined Parameter",
+			                     Usage := Output,
+			                     RADIX := Decimal,
+			                     Required := No,
+			                     Visible := No,
+			                     ExternalAccess := Read Only);
+			Enable_Flasher : BOOL (Usage := Input,
+			                          RADIX := Decimal,
+			                          Required := Yes,
+			                          Visible := Yes,
+			                          DefaultData := 0);
+			Slow_Bit : BOOL (Usage := Output,
+			                    RADIX := Decimal,
+			                    Required := Yes,
+			                    Visible := Yes,
+			                    ExternalAccess := Read Only,
+			                    DefaultData := 0);
+			Fast_Bit : BOOL (Usage := Output,
+			                    RADIX := Decimal,
+			                    Required := Yes,
+			                    Visible := Yes,
+			                    ExternalAccess := Read Only,
+			                    DefaultData := 0);
+		END_PARAMETERS
+
+		LOCAL_TAGS
+			Fast_On : TIMER (ExternalAccess := None,
+			                  DefaultData := "[0,500,0]");
+			Fast_Off : TIMER (ExternalAccess := None,
+			                   DefaultData := "[0,500,0]");
+			Slow_On : TIMER (ExternalAccess := None,
+			                  DefaultData := "[0,1000,0]");
+			Slow_Off : TIMER (ExternalAccess := None,
+			                   DefaultData := "[0,1000,0]");
+		END_LOCAL_TAGS
+
+		ROUTINE Logic 
+				N: XIC(Enable_Flasher)[XIO(Fast_Off.DN) TON(Fast_On,?,?) ,XIC(Fast_On.DN) TON(Fast_Off,?,?) ,XIC(Fast_On.TT) OTE(Fast_Bit) ,XIO(Slow_Off.DN) TON(Slow_On,?,?) ,XIC(Slow_On.DN) TON(Slow_Off,?,?) ,XIC(Slow_On.TT) OTE(Slow_Bit) ];
+		END_ROUTINE
+
+	END_ADD_ON_INSTRUCTION_DEFINITION
+
+	TAG
+		B3 : INT[25] (COMMENT[0].1 := "Power Up On New Day Bit",
+		            COMMENT[0].2 := "Manual Close Vices$NMAN_VICE_CLOSE",
+		            COMMENT[0].3 := "Manual Stamp Cycle Bit",
+		            COMMENT[0].4 := "Manual Pointing Bit",
+		            COMMENT[0].6 := "Manual Chamber Bit",
+		            COMMENT[0].8 := "New Day One Shot Bit",
+		            COMMENT[0].9 := "Rod Count OSR",
+		            COMMENT[0].10 := "Rod Product Count Bit",
+		            COMMENT[0].14 := "No Fault Syste Bit",
+		            COMMENT[0].15 := "Manual Beam Move Bit",
+		            COMMENT[1].2 := "Auto Vice Close",
+		            COMMENT[1].3 := "Auto Stamp Cycle Bit",
+		            COMMENT[1].5 := "Auto P and C Cycle Bit",
+		            COMMENT[1].6 := "Manual Stamp Done Bit",
+		            COMMENT[1].7 := "Manual Point Done Bit",
+		            COMMENT[1].8 := "Manual Chamber Done Bit",
+		            COMMENT[1].9 := "Auto Beam Move Bit",
+		            COMMENT[1].10 := "Move Beam Up Bit",
+		            COMMENT[1].11 := "Move Beam Forward Bit",
+		            COMMENT[1].12 := "Move Beam Down Bit",
+		            COMMENT[2].1 := "Stamp Down Bit",
+		            COMMENT[2].2 := "Stamp Forward Bit",
+		            COMMENT[2].4 := "Point Done Bit",
+		            COMMENT[2].6 := "Chamber Done Bit",
+		            COMMENT[2].7 := "Auto Point Done",
+		            COMMENT[2].8 := "Auto chamber Done",
+		            COMMENT[2].9 := "Auto Stamp Done Bit",
+		            COMMENT[2].14 := "Mark Rod Kick Single Shot Bit",
+		            COMMENT[20].0 := "Single SHot To Force Release of HMI Button",
+		            COMMENT[20].1 := "HMI M1 Motor Overload Triped Indicator & Alarm",
+		            COMMENT[20].3 := "Single SHot To Reset Counter If Trip Resets One Shot",
+		            RADIX := Decimal) := [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0];
+		C5 : COUNTER[10] (COMMENT[0] := "No Rods Counter",
+		            COMMENT[0].DN := "No Rods Counter") := [[0,3,0],[0,3,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
+		DOW_Century : DINT (RADIX := Decimal) := 20;
+		DOW_Day : DINT (RADIX := Decimal) := 25;
+		DOW_InputDate : DateTime_Type  := [2026,2,25,14,58,51,101756];
+		DOW_Month : DINT (RADIX := Decimal) := 12;
+		DOW_Output : DINT (RADIX := Decimal) := 2;
+		DOW_Temp00 : REAL (RADIX := Float) := 2.02600000e+001;
+		DOW_Temp01 : DINT (RADIX := Decimal) := 31;
+		DOW_Temp02 : REAL (RADIX := Float) := 3.08000011e+001;
+		DOW_Temp03 : DINT (RADIX := Decimal) := 30;
+		DOW_Temp04 : DINT (RADIX := Decimal) := 40;
+		DOW_Temp05 : REAL (RADIX := Float) := 6.25000000e+000;
+		DOW_Temp06 : DINT (RADIX := Decimal) := 6;
+		DOW_Temp07 : REAL (RADIX := Float) := 5.00000000e+000;
+		DOW_Temp08 : DINT (RADIX := Decimal) := 5;
+		DOW_Temp09 : DINT (RADIX := Decimal) := 55;
+		DOW_Temp10 : DINT (RADIX := Decimal) := 15;
+		DOW_Temp11 : DINT (RADIX := Decimal) := 40;
+		DOW_Temp12 : DINT (RADIX := Decimal) := 46;
+		DOW_Temp13 : DINT (RADIX := Decimal) := 51;
+		DOW_Temp14 : DINT (RADIX := Decimal) := 2;
+		DOW_Temp15 : REAL (RADIX := Float) := 2.00000000e+000;
+		DOW_Year : DINT (RADIX := Decimal) := 25;
+		F8 : REAL[30] (COMMENT[0] := "Todays Rod Production",
+		            COMMENT[1] := "Yesterdays Rod Production",
+		            COMMENT[2] := "2 Days Ago Rod Production",
+		            COMMENT[3] := "3 Days Ago Rod Production",
+		            COMMENT[4] := "4 Days Ago Rod Production",
+		            COMMENT[5] := "5 Days Ago Rod Production",
+		            COMMENT[6] := "6 Days Ago Rod Production",
+		            COMMENT[7] := "7 Days Ago Rod Production",
+		            RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+				,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+				,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+				,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+				,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+				];
+		Flasher_Control : Program_Flasher  := [23,[-1070869046,500,143],[2872634,500,0],[-1607739958,1000,1000],[-1070869046,1000,403]];
+		Flasher_Enable : BOOL (RADIX := Decimal) := 1;
+		Flasher_Fast : BOOL (RADIX := Decimal) := 0;
+		Flasher_Slow : BOOL (RADIX := Decimal) := 0;
+		HMI_Panel_IO : DINT[40] (COMMENT[0].0 := "HMI Panel M1 Motor Overload Reset Button",
+		            COMMENT[10].0 := "HMI Panel M1 Motor Overload Ready Indication",
+		            RADIX := Decimal) := [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+		InputModule1 OF Local:1:I (Description := "Input Image For Crimson 3.2 to import image of Inout module in SLot 1",
+		            COMMENT.DATA.0 := "ESR Emergency Stop Relay Input",
+		            COMMENT.DATA.1 := "MS1 MS2 AUX Point & Chamfer Motor Starter Auxiliaries In Series",
+		            COMMENT.DATA.2 := "AUTO STOP PB Operator Auto Stop PB",
+		            COMMENT.DATA.3 := "MS3 AUX Coolant Pump Motor Starter Auxiliary",
+		            COMMENT.DATA.4 := "Auto Manual Selector Switch$NManual_Selected",
+		            COMMENT.DATA.5 := "AUTO START PB",
+		            COMMENT.DATA.6 := "POINT MANUAL PB",
+		            COMMENT.DATA.7 := "CHAMFER MANUAL PB",
+		            COMMENT.DATA.8 := "VICES_CLOSE_PB",
+		            COMMENT.DATA.9 := "VICES_OPEN_PB");
+		InputModule2 OF Local:2:I (Description := "Input Image For Crimson 3.2 to import image of Inout module in SLot 2",
+		            COMMENT.DATA.0 := "PROX1 Rod In Position to Clamp",
+		            COMMENT.DATA.1 := "PROX2 Rod In Position to Mark",
+		            COMMENT.DATA.2 := "PROX3 Vice 1 Is Opeen",
+		            COMMENT.DATA.3 := "VICES CLOSED PROXES Vices Closed Prox Vice 1 & Prox Vice 2 Wired In Series",
+		            COMMENT.DATA.4 := "PROX4 Vice 2 Is Open",
+		            COMMENT.DATA.5 := "RESET PB ESR / Fault Reset Button",
+		            COMMENT.DATA.6 := "LS1 Point Depth Limit Switch",
+		            COMMENT.DATA.7 := "COOLANT ON SW Coolant On Switch",
+		            COMMENT.DATA.8 := "LS3 Chamfer Depth Limit Switch",
+		            COMMENT.DATA.9 := "HEADS ON SW Cutting Heads On Switch",
+		            COMMENT.DATA.10 := "INDEX PB Operator Index PB",
+		            COMMENT.DATA.11 := "LS5 Marking Head Home Limit Switch",
+		            COMMENT.DATA.12 := "LS6 Marking Head Not Up Limit Switch",
+		            COMMENT.DATA.13 := "SW2 P AND C ONLY Point and Chamfer Only No Stamping",
+		            COMMENT.DATA.14 := "SW2 STAMP ONLY",
+		            COMMENT.DATA.15 := "STAMP PB");
+		InputModule4 OF Local:4:I (Description := "Input Image For Crimson 3.2 to import image of Inout module in SLot 4",
+		            COMMENT.DATA.0 := "BEAM1 UP FB",
+		            COMMENT.DATA.1 := "BEAM1 DOWN FB",
+		            COMMENT.DATA.2 := "BEAM1 FWD FB",
+		            COMMENT.DATA.3 := "BEAM1 HOME FB",
+		            COMMENT.DATA.4 := "BEAM2 UP FB",
+		            COMMENT.DATA.5 := "BEAM2 DOWN FB",
+		            COMMENT.DATA.6 := "BEAM2 FWD FB",
+		            COMMENT.DATA.7 := "BEAM2 HOME FB");
+		InputModule5 OF Local:5:I (Description := "Input Image For Crimson 3.2 to import image of Inout module in SLot 5");
+		M1 : Runtime_Structure  := [1,0,0,0,899,1320,3149,0];
+		M1_Machine_Run_Time : Machine_Time  := [39,58,25,2,899,1320,3149,0,1,2,25,58];
+		M1_Reset_Lockout : BOOL (RADIX := Decimal) := 0;
+		M2 : Runtime_Structure  := [1,0,0,0,899,1320,3121,0];
+		M2_Machine_Run_Time : Machine_Time  := [39,58,25,2,899,1320,3121,0,1,2,25,58];
+		M3 : Runtime_Structure  := [1,0,0,0,899,1320,3121,0];
+		M3_Machine_Run_Time : Machine_Time  := [39,58,25,2,899,1320,3121,0,1,2,25,58];
+		N7 : INT[10] (COMMENT[0].0 := "VICE FAIL 2 CLOSE$NFault Word 0 Trigger Message 0",
+		            COMMENT[0].1 := "Point Or Chamfer Motor Overload Or Starter Failed MSI or MS2 TRIP Fault Word 0  Message 1",
+		            COMMENT[0].3 := "Cooland Overload Starter Failure MS3 Fault  Word 0 Message 3",
+		            COMMENT[0].4 := "VICE1 FAIL 2 OPEN $NFault Word 0  Message 4",
+		            COMMENT[0].5 := "Stamp Not Home Fault Word 0 message 5",
+		            COMMENT[0].6 := "Stamp Down  Fault Word 0 message 6",
+		            COMMENT[0].7 := "Beam  1 Not Down Fault word 0 message 7",
+		            COMMENT[0].8 := "Beam  2 Not Down Fault word 0 message 8",
+		            COMMENT[0].9 := "Beam  1 Up Fault word 0 message 9",
+		            COMMENT[0].10 := "Beam  2 Up Fault word 0 message 10",
+		            COMMENT[0].11 := "Beam  1 Not Down Fault word 0 message 11",
+		            COMMENT[0].12 := "Beam  2 Not Down Fault word 0 message 12",
+		            COMMENT[0].13 := "Beam  1 Not Up Fault word 0 message 13",
+		            COMMENT[0].14 := "Beam  2 Not Up Fault word 0 message 13",
+		            COMMENT[0].15 := "Beam  1 Not Home Fault word 0 message 15",
+		            COMMENT[1].0 := "Beam  2 Not Home Fault word 1 message 0",
+		            COMMENT[1].1 := "Beam  1 Forward  Fault word 1 message 1",
+		            COMMENT[1].2 := "Beam  2 Forward  Fault word 1 message 2",
+		            COMMENT[1].3 := "Beam  1 Not Forward Fault word 1 message 3",
+		            COMMENT[1].4 := "Beam  2 Not Forward Fault word 1 message 4",
+		            COMMENT[1].5 := "Beam  1 Home Fault word 1 message 5",
+		            COMMENT[1].6 := "Beam  2 Home Fault word 1 message 6",
+		            COMMENT[1].7 := "No Rods Fault Word 1 Message 7",
+		            COMMENT[1].8 := "VICE2 FAIL 2 OPEN Fault Word 1  Message  8",
+		            COMMENT[3] := "Month Saved",
+		            COMMENT[4] := "Day Saved",
+		            RADIX := Decimal) := [0,0,0,2,24,0,0,0,0,0];
+		One : DINT (RADIX := Decimal) := 1;
+		OutputModule3 OF Local:3:O (Description := "Output Image For Crimson 3.2 to import image of Output module in SLot 3",
+		            COMMENT.DATA.0 := "VICES_CLOSE_SOL",
+		            COMMENT.DATA.1 := "WALK BEAM UP SOL Walking Beam UpSolenoid",
+		            COMMENT.DATA.2 := "WALK BEAM FWD SOL Walking Beam Forward Solenoid",
+		            COMMENT.DATA.3 := "MARK HEAD DOWN SOL Marking Head Down Solenoid",
+		            COMMENT.DATA.4 := "MARK HEAD FWD SOL Marking Head Forward Solenoid",
+		            COMMENT.DATA.5 := "MARK HEAD ROD KICKER",
+		            COMMENT.DATA.6 := "COUNT",
+		            COMMENT.DATA.7 := "POINT ADVANCE SOL",
+		            COMMENT.DATA.8 := "CHAMFER ADV SOLChamfer Advance Solenoid",
+		            COMMENT.DATA.9 := "AUTO_PILOT_LT",
+		            COMMENT.DATA.10 := "FAULT_PILOT_LT",
+		            COMMENT.DATA.11 := "BEACON_PILOT_LT",
+		            COMMENT.DATA.12 := "MS1 Point Motor StarterCoil",
+		            COMMENT.DATA.13 := "MS2 Chamfer MotorStarter Coil",
+		            COMMENT.DATA.14 := "MS3 Coolant Pump MotorStarter Coil");
+		T4 : TIMER[25] (COMMENT[0] := "ROD_SETTLE_TMR",
+		            COMMENT[1] := "Heads At Speed",
+		            COMMENT[2] := "Mark Rod SettleTimer",
+		            COMMENT[3] := "Stamp Down Timer$NTime For Down Stroke Of Marking Head",
+		            COMMENT[4] := "Stamp ForwardTimer",
+		            COMMENT[4].DN := "Time For Forward Stroke Of Marking Head",
+		            COMMENT[5] := "Stamp Up Timer",
+		            COMMENT[5].DN := "Time Delay Marking Head To Clear Rod Before Retracting",
+		            COMMENT[6] := "Vice Fail Timer",
+		            COMMENT[7] := "Clear Point Tool Timer",
+		            COMMENT[8] := "Clear Chamber Timer",
+		            COMMENT[9] := "Pump Primed Timer",
+		            COMMENT[10] := "PANDC Strters Timer",
+		            COMMENT[11] := "Mark Kick Timer",
+		            COMMENT[12] := "Coolant Starter Timer",
+		            COMMENT[13] := "Stamp Not Home Timer",
+		            COMMENT[14] := "Beam Not Down Fault Timer",
+		            COMMENT[15] := "Beam Up Fault Timer",
+		            COMMENT[16] := "Beam Not Home Timer",
+		            COMMENT[17] := "Beam Not Forward Timer",
+		            COMMENT[18] := "Starter 2 Delay Timer") := [[0,3000,0],[0,1000,0],[0,200,0],[0,1000,0],[0,1500,0],[0,500,0],[-1607740181,2000,2000],[0,800,0],[0,800,0],[0,500,0],[0,5000,0],[0,500,0],[0,500
+				,0],[1942344,2000,0],[-1607740181,2500,2500],[0,3500,0],[0,2500,0],[0,1500,0],[0,7500,0],[0,0,0],[3344554,30000,0],[0,0,0],[0,0,0],[0,0,0
+				],[0,0,0]];
+		TestDateTime : DateTime_Type  := [2026,2,25,14,58,51,257415];
+		Test_CurrentDate : BOOL (RADIX := Decimal) := 1;
+		Test_Result : DINT (RADIX := Decimal) := 2;
+		Zero : DINT (RADIX := Decimal) := 0;
+	END_TAG
+
+	PROGRAM MainProgram (MAIN := "MainProgram",
+	                     MODE := 0,
+	                     DisableFlag := 0)
+			TAG
+			END_TAG
+
+			ROUTINE Get_Day_Of_Week 
+					N: NOP();
+					RC: "Get the Controllers real time clock broken down by Year, month, day...microseconds and store in a tag so that the values can be used.";
+					N: XIC(Test_CurrentDate)GSV(WallClockTime,?,DateTime,TestDateTime.Year);
+					N: MOV(TestDateTime.Year,TestDateTime.Year)MOV(TestDateTime.Month,TestDateTime.Month)MOV(TestDateTime.Day,TestDateTime.Day)MOV(TestDateTime.Hour,TestDateTime.Hour)MOV(TestDateTime.Minute,TestDateTime.Minute)MOV(TestDateTime.Second,TestDateTime.Second);
+					N: JSR(Time_Date_Data,1,TestDateTime,Test_Result)MOV(Test_Result,Test_Result);
+			END_ROUTINE
+
+			ROUTINE M1_Monitoring 
+					N: OTE(M1.Running);
+					N: Machine_Time(M1_Machine_Run_Time,M1.Running,DOW_InputDate.Minute,DOW_InputDate.Day,DOW_InputDate.Month,M1.Reset,M1.CurrentRunMinutes,M1.Yesterday,M1.Month_Total,M1.Last_Month_Total);
+					N: [XIC(HMI_Panel_IO[0].0) ONS(B3[20].0) XIC(M1_Point_Motor1:I.TripPresent) XIO(M1_Reset_Lockout) [OTE(M1_Point_Motor1:O.TripReset) ,CTU(C5[1],?,?) ] ,XIC(M1.Running) ONS(B3[20].3) RES(C5[1]) ,XIC(C5[1].DN) [OTE(M1_Reset_Lockout) ,TON(T4[20],?,?) ,XIC(T4[20].DN) RES(C5[1]) ] ,XIC(M1_Point_Motor1:I.TripPresent) OTE(B3[20].1) ];
+					N: XIC(M1_Point_Motor1:I.Ready)OTE(HMI_Panel_IO[10].0);
+			END_ROUTINE
+
+			ROUTINE M2_Monitoring 
+					N: OTE(M2.Running);
+					N: Machine_Time(M2_Machine_Run_Time,M2.Running,DOW_InputDate.Minute,DOW_InputDate.Day,DOW_InputDate.Month,M1.Reset,M2.CurrentRunMinutes,M2.Yesterday,M2.Month_Total,M2.Last_Month_Total);
+			END_ROUTINE
+
+			ROUTINE M3_Monitoring 
+					N: OTE(M3.Running);
+					N: Machine_Time(M3_Machine_Run_Time,M3.Running,DOW_InputDate.Minute,DOW_InputDate.Day,DOW_InputDate.Month,M1.Reset,M3.CurrentRunMinutes,M3.Yesterday,M3.Month_Total,M3.Last_Month_Total);
+			END_ROUTINE
+
+			ROUTINE MainControl 
+					RC: "The Micrologix 1100  used these outputs O:0/0 AUTO_PILOT_LT $N"
+					    " O:0/1 FAULT_PILOT_LT  $N"
+					    "O:0/2 BEACON_PILOT_LT  $N"
+					    "O:0/3 MS1 Point Motor StarterCoil  $N"
+					    "O:0/4 MS2 Chamfer MotorStarter Coil  $N"
+					    "O:0/5 MS3 Coolant Pump MotorStarter Coil  $N"
+					    "These were on the actual CPU Module$N"
+					    "They are now outputs on slot 3 1759-OW16";
+					N: NOP();
+					RC: "The Micrologix 1100  used these inputs$N"
+					    "I:0/0 ESR Emergency Stop Relay Input      $N"
+					    "I:0/1 MS1 MS2 AUX Point & Chamfer Motor Starter Auxiliaries In Series    $N"
+					    "I:0/2 AUTO STOP PB Operator Auto Stop PB      $N"
+					    "I:0/3 MS3 AUX Coolant Pump Motor Starter Auxiliary      $N"
+					    "I:0/4 MANUAL SELECTED Auto Manual Selector Switch      $N"
+					    "I:0/5 AUTO START PB        $N"
+					    "I:0/6 POINT MANUAL PB        $N"
+					    "I:0/7 CHAMFER MANUAL PB        $N"
+					    "I:0/8 VICES CLOSE PB        $N"
+					    "I:0/9 VICES OPEN PB       $N"
+					    "These were on the actual CPU Module and are now slot$N"
+					    "$N"
+					    "";
+					N: NOP();
+					RC: "MANUAL VICE OPEN/CLOSE LOGIC$N"
+					    "A ROD MUST BE IN POSITION TO CLOSE THE CLAMP. ";
+					N: XIC(InputModule1.Data.4)XIC(InputModule2.Data.0)XIO(InputModule1.Data.9)[XIC(InputModule1.Data.8) ,XIC(OutputModule3.Data.0) ]OTE(B3[0].2);
+					RC: "ADD A TIME DELAY FOR THE ROD TO SETTLE IN AUTO MODE BEFORE CLOSING THE VICES";
+					N: XIC(InputModule2.Data.0)TON(T4[0],?,?);
+					N: XIC(OutputModule3.Data.9)XIO(InputModule2.Data.14)XIC(T4[0].DN)XIC(InputModule4.Data.1)XIC(InputModule4.Data.5)[XIO(B3[2].8) ,XIC(B3[2].7) ]OTE(B3[1].2);
+					N: [XIC(B3[0].2) ,XIC(B3[1].2) ]XIC(InputModule1.Data.0)OTE(OutputModule3.Data.0);
+					RC: "CHECK THAT THE VICES ARE WORKING CORRECTLY. THIS TIMER WILL GENERATE A FAULT IF THE VICES ARE NOT WORKING CORRECTLY";
+					N: [XIC(InputModule1.Data.0) XIC(OutputModule3.Data.0) XIO(InputModule2.Data.3) ,XIO(OutputModule3.Data.0) [XIO(InputModule2.Data.2) ,XIO(InputModule2.Data.4) ] ]TON(T4[6],?,?);
+					N: XIC(InputModule1.Data.0)XIC(T4[6].DN)XIC(OutputModule3.Data.0)XIO(InputModule2.Data.3)OTL(N7[0].0);
+					N: XIC(InputModule1.Data.0)XIC(T4[6].DN)XIO(OutputModule3.Data.0)[XIO(InputModule2.Data.2) OTL(N7[0].4) ,XIO(InputModule2.Data.4) OTL(N7[1].8) ];
+					N: XIC(InputModule1.Data.4)XIC(InputModule1.Data.6)XIO(B3[0].4)OTU(B3[2].4);
+					N: XIC(InputModule1.Data.0)XIC(InputModule1.Data.4)XIO(InputModule1.Data.6)OTE(B3[0].4);
+					N: XIC(InputModule1.Data.0)XIC(InputModule2.Data.9)OTE(OutputModule3.Data.12);
+					N: XIC(OutputModule3.Data.12)TON(T4[18],?,?);
+					N: XIC(InputModule1.Data.0)XIC(OutputModule3.Data.12)XIC(OutputModule3.Data.13)XIO(InputModule1.Data.1)TON(T4[10],?,?);
+					N: XIC(T4[10].DN)OTL(N7[0].1);
+					N: XIC(OutputModule3.Data.12)XIC(OutputModule3.Data.13)XIC(InputModule1.Data.1)TON(T4[1],?,?);
+					N: XIC(T4[1].DN)[XIC(OutputModule3.Data.9) XIC(InputModule2.Data.3) XIC(T4[9].DN) XIC(T4[0].DN) ,XIC(B3[0].4) ]XIC(InputModule4.Data.1)XIC(InputModule4.Data.5)XIO(InputModule2.Data.6)XIC(B3[2].4)OTE(OutputModule3.Data.7);
+					N: XIC(T4[1].DN)XIC(InputModule2.Data.6)OTL(B3[2].4);
+					N: XIC(B3[2].4)TON(T4[7],?,?);
+					N: XIC(OutputModule3.Data.9)XIO(InputModule2.Data.14)XIC(B3[2].4)XIC(T4[7].DN)OTE(B3[2].7);
+					N: XIO(OutputModule3.Data.9)XIO(InputModule2.Data.14)XIC(B3[2].4)XIC(T4[7].DN)OTE(B3[1].7);
+					N: XIC(InputModule1.Data.4)XIO(InputModule1.Data.7)XIC(B3[0].6)OTU(B3[2].6);
+					N: XIC(InputModule1.Data.0)XIO(InputModule1.Data.4)XIC(InputModule1.Data.7)OTU(B3[0].6);
+					N: XIC(InputModule1.Data.0)XIC(InputModule2.Data.9)XIC(T4[18].DN)OTU(OutputModule3.Data.13);
+					N: XIC(T4[1].DN)[XIC(OutputModule3.Data.9) XIC(T4[9].DN) XIC(T4[0].DN) XIC(InputModule2.Data.3) ,XIC(B3[0].6) ]XIC(InputModule4.Data.1)XIC(InputModule4.Data.5)XIO(InputModule2.Data.8)XIO(B3[2].6)OTE(OutputModule3.Data.8);
+					N: XIC(T4[1].DN)XIC(InputModule2.Data.8)OTL(B3[2].6);
+					N: XIC(B3[2].6)TON(T4[8],?,?);
+					N: XIC(OutputModule3.Data.9)XIO(InputModule2.Data.14)XIC(B3[2].6)XIC(T4[8].DN)OTE(B3[2].8);
+					N: XIO(OutputModule3.Data.9)XIO(InputModule2.Data.14)XIC(B3[2].6)XIC(T4[8].DN)OTE(B3[1].8);
+					N: XIC(InputModule1.Data.0)XIC(InputModule2.Data.7)OTE(OutputModule3.Data.14);
+					N: XIC(InputModule1.Data.0)XIC(OutputModule3.Data.14)XIC(InputModule1.Data.3)TON(T4[12],?,?);
+					N: XIC(T4[12].DN)OTE(N7[0].3);
+					N: XIC(OutputModule3.Data.14)TON(T4[9],?,?);
+					N: XIC(InputModule2.Data.1)TON(T4[2],?,?);
+					N: XIC(InputModule1.Data.0)XIC(InputModule1.Data.4)XIC(T4[2].DN)[XIC(InputModule2.Data.11) XIO(InputModule2.Data.12) XIC(InputModule2.Data.15) ,XIC(B3[0].3) XIO(T4[5].DN) ]OTE(B3[0].3);
+					N: XIC(InputModule1.Data.0)[XIC(InputModule1.Data.4) XIC(B3[0].3) ,XIC(B3[2].1) ]XIC(T4[2].DN)ONS(B3[2].14)OTL(OutputModule3.Data.5);
+					N: XIC(OutputModule3.Data.5)TON(T4[11],?,?);
+					N: [XIC(T4[11].DN) ,XIO(InputModule1.Data.0) ]OTU(OutputModule3.Data.5);
+					N: [XIC(B3[0].3) ,XIC(T4[2].DN) XIC(InputModule4.Data.1) XIC(InputModule4.Data.5) [XIC(InputModule2.Data.11) XIO(InputModule2.Data.12) ,XIC(B3[2].1) ] XIO(B3[2].9) XIC(B3[1].3) ]OTE(B3[2].1);
+					N: XIC(B3[2].1)XIC(T4[4].DN)OTE(OutputModule3.Data.3);
+					N: XIC(B3[2].1)TON(T4[3],?,?);
+					N: XIC(T4[3].DN)OTE(B3[2].2);
+					N: XIC(B3[2].2)OTE(OutputModule3.Data.4);
+					N: XIC(OutputModule3.Data.4)TON(T4[4],?,?);
+					N: XIC(T4[4].DN)XIO(OutputModule3.Data.4)TON(T4[5],?,?);
+					N: XIC(B3[1].3)XIC(T4[5].DN)OTL(B3[2].9);
+					N: XIO(B3[1].3)XIC(T4[5].DN)OTE(B3[1].6);
+					N: XIC(InputModule1.Data.0)XIO(OutputModule3.Data.3)XIO(OutputModule3.Data.4)[XIO(InputModule2.Data.11) ,XIO(InputModule2.Data.12) ]TON(T4[13],?,?);
+					N: XIC(T4[13].DN)XIO(InputModule2.Data.11)OTL(N7[0].5);
+					N: XIC(T4[13].DN)XIO(InputModule2.Data.12)OTL(N7[0].6);
+					N: XIC(InputModule1.Data.0)XIO(InputModule1.Data.4)[XIC(InputModule2.Data.7) XIC(InputModule2.Data.9) ,XIC(InputModule2.Data.14) ]XIC(InputModule1.Data.2)[XIC(InputModule1.Data.5) ,XIC(OutputModule3.Data.9) XIC(C5[0].DN) ]XIC(B3[0].14)OTE(OutputModule3.Data.9);
+					N: XIC(OutputModule3.Data.9)[XIC(InputModule2.Data.13) ,XIO(InputModule2.Data.13) XIO(InputModule2.Data.14) ]OTE(B3[1].5);
+					N: XIC(OutputModule3.Data.9)[XIO(InputModule2.Data.13) XIO(InputModule2.Data.14) ,XIC(InputModule2.Data.14) ]OTE(B3[1].3);
+					N: XIC(OutputModule3.Data.9)[XIO(InputModule2.Data.14) XIO(InputModule2.Data.0) ,XIC(InputModule2.Data.14) XIO(InputModule2.Data.1) ,XIO(InputModule2.Data.14) XIC(InputModule2.Data.0) XIC(B3[2].8) XIC(B3[2].7) ,XIC(InputModule2.Data.14) XIC(InputModule2.Data.1) XIC(B3[2].9) ]OTE(B3[1].9);
+					N: XIC(InputModule1.Data.0)XIC(InputModule1.Data.4)XIC(InputModule2.Data.10)OTE(B3[0].15);
+					N: XIO(InputModule2.Data.0)XIC(B3[1].9)[OTU(B3[2].4) ,OTU(B3[2].6) ];
+					N: XIO(InputModule2.Data.12)XIO(InputModule2.Data.11)XIO(InputModule2.Data.1)XIC(B3[1].9)OTU(B3[2].9);
+					N: XIC(InputModule4.Data.1)XIC(InputModule4.Data.5)XIC(InputModule4.Data.3)XIC(InputModule4.Data.7)XIC(InputModule2.Data.11)XIO(InputModule2.Data.12)[XIC(B3[1].9) ,XIC(B3[0].15) ]XIO(OutputModule3.Data.0)XIO(InputModule2.Data.3)XIC(InputModule2.Data.2)XIC(InputModule2.Data.4)XIO(B3[1].12)OTL(B3[1].10);
+					N: XIC(B3[1].10)OTE(OutputModule3.Data.1);
+					N: XIC(B3[1].10)XIC(InputModule4.Data.0)XIC(InputModule4.Data.4)OTL(B3[1].11);
+					N: XIC(B3[1].11)OTE(OutputModule3.Data.2);
+					N: XIC(B3[1].11)XIC(InputModule4.Data.2)XIC(InputModule4.Data.6)XIC(InputModule4.Data.0)XIC(InputModule4.Data.4)OTL(B3[1].12);
+					N: XIC(B3[1].12)OTU(B3[1].10);
+					N: XIC(B3[1].12)XIC(InputModule4.Data.1)XIC(InputModule4.Data.5)XIC(InputModule4.Data.2)XIC(InputModule4.Data.6)OTU(B3[1].11);
+					N: XIC(OutputModule3.Data.1)XIC(InputModule4.Data.1)XIC(InputModule4.Data.5)XIC(InputModule4.Data.3)XIC(InputModule4.Data.7)OTU(B3[1].12);
+					N: XIO(OutputModule3.Data.1)[XIO(InputModule4.Data.1) ,XIO(InputModule4.Data.5) ,XIC(InputModule4.Data.0) ,XIC(InputModule4.Data.4) ]TON(T4[14],?,?);
+					N: XIC(InputModule1.Data.0)XIC(T4[14].DN)[XIO(InputModule4.Data.1) OTL(N7[0].7) ,XIO(InputModule4.Data.5) OTL(N7[0].8) ,XIC(InputModule4.Data.0) OTL(N7[0].9) ,XIC(InputModule4.Data.4) OTL(N7[0].10) ];
+					N: XIC(InputModule1.Data.0)XIC(OutputModule3.Data.1)[XIC(InputModule4.Data.1) ,XIC(InputModule4.Data.5) ,XIO(InputModule4.Data.0) ,XIO(InputModule4.Data.4) ]TON(T4[15],?,?);
+					N: XIC(T4[15].DN)[XIC(InputModule4.Data.1) OTL(N7[0].11) ,XIC(InputModule4.Data.5) OTL(N7[0].12) ,XIO(InputModule4.Data.0) OTL(N7[0].13) ,XIO(InputModule4.Data.4) OTL(N7[0].14) ];
+					N: XIC(OutputModule3.Data.2)[XIO(InputModule4.Data.3) ,XIO(InputModule4.Data.7) ,XIC(InputModule4.Data.2) ,XIC(InputModule4.Data.6) ]TON(T4[16],?,?);
+					N: XIC(T4[16].DN)[XIO(InputModule4.Data.3) OTL(N7[0].15) ,XIO(InputModule4.Data.7) OTL(N7[1].0) ,XIC(InputModule4.Data.2) OTL(N7[1].1) ,XIC(InputModule4.Data.6) OTL(N7[1].2) ];
+					N: XIC(InputModule1.Data.0)XIC(OutputModule3.Data.2)[XIO(InputModule4.Data.2) ,XIO(InputModule4.Data.6) ,XIC(InputModule4.Data.3) ,XIC(InputModule4.Data.7) ]TON(T4[17],?,?);
+					N: XIC(T4[17].DN)[XIO(InputModule4.Data.2) OTL(N7[1].3) ,XIO(InputModule4.Data.6) OTL(N7[1].4) ,XIC(InputModule4.Data.3) OTL(N7[1].5) ,XIC(InputModule4.Data.7) OTL(N7[1].6) ];
+					N: XIC(OutputModule3.Data.9)XIC(InputModule4.Data.7)XIC(InputModule4.Data.5)XIC(InputModule4.Data.1)XIC(InputModule4.Data.3)[XIO(InputModule2.Data.14) XIO(InputModule2.Data.0) ,XIC(InputModule2.Data.14) XIO(InputModule2.Data.1) ]CTU(C5[0],?,?);
+					N: XIC(C5[0].DN)OTL(N7[1].7);
+					N: [XIC(OutputModule3.Data.9) [XIO(InputModule2.Data.14) XIC(InputModule2.Data.0) ,XIC(InputModule2.Data.14) XIC(InputModule2.Data.1) ] ,XIC(InputModule1.Data.5) ,XIC(InputModule2.Data.5) XIC(N7[1].7) ]RES(C5[0]);
+					N: [[XIC(InputModule2.Data.14) ,XIO(InputModule2.Data.14) XIO(InputModule2.Data.13) ] [XIC(OutputModule3.Data.9) XIC(B3[2].9) ,XIO(OutputModule3.Data.9) XIC(B3[1].6) ] ,XIC(InputModule2.Data.13) [XIC(OutputModule3.Data.9) XIC(B3[2].7) XIC(B3[2].8) ,XIO(OutputModule3.Data.9) XIC(B3[2].4) XIC(B3[2].6) XIC(B3[0].15) ] ]OTE(OutputModule3.Data.6);
+					N: [XIO(InputModule1.Data.0) ,XIC(Flasher_Enable) XIC(Flasher_Fast) NEQ(N7[0],Zero) ,XIC(Flasher_Enable) XIC(Flasher_Fast) NEQ(N7[1],Zero) ,XIC(Flasher_Enable) XIC(Flasher_Slow) EQU(N7[0],Zero) EQU(N7[1],Zero) EQU(N7[2],Zero) ]OTE(OutputModule3.Data.10);
+					N: XIC(InputModule2.Data.5)[MOV(Zero,N7[0]) ,MOV(Zero,N7[1]) ,MOV(Zero,N7[2]) ];
+			END_ROUTINE
+
+			ROUTINE MainProgram 
+					N: JSR(MainControl,0)JSR(Get_Day_Of_Week,0)JSR(Production,0);
+					N: JSR(M1_Monitoring,0)JSR(M2_Monitoring,0)JSR(M3_Monitoring,0)JSR(Misc_Utilities,0);
+			END_ROUTINE
+
+			ROUTINE Misc_Utilities 
+					N: Program_Flasher(Flasher_Control,Flasher_Enable,Flasher_Slow,Flasher_Fast);
+			END_ROUTINE
+
+			ROUTINE Production 
+					N: XIC(S:FS)[NEQ(DOW_InputDate.Month,N7[3]) ,NEQ(DOW_InputDate.Day,N7[4]) ]OTE(B3[0].1);
+					N: XIC(S:FS)[MOV(DOW_InputDate.Month,N7[3]) ,MOV(DOW_InputDate.Day,N7[4]) ];
+					N: [EQU(DOW_InputDate.Hour,Zero) ,XIC(B3[0].1) ]ONS(B3[0].8)[MOV(F8[6],F8[7]) ,MOV(F8[5],F8[6]) ,MOV(F8[4],F8[5]) ,MOV(F8[3],F8[4]) ,MOV(F8[2],F8[3]) ,MOV(F8[1],F8[2]) ,MOV(F8[0],F8[1]) ,MOV(Zero,F8[0]) ];
+					N: XIC(OutputModule3.Data.6)OSR(B3[0].9,B3[0].10);
+					N: XIC(B3[0].10)ADD(F8[0],One,F8[0]);
+			END_ROUTINE
+
+			ROUTINE Time_Date_Data 
+					N: SBR(DOW_InputDate)NOP();
+					N: NOP();
+					RC: "Extract the two digit year within the century from the 4 digit year value. (Lower two digits)";
+					N: MOV(DOW_InputDate.Day,DOW_Day)MOD(DOW_InputDate.Year,100,DOW_Year);
+					RC: "Extract the two digit centurr from the 4 digit year value.  (Upper two digits)$N"
+					    "";
+					N: DIV(DOW_InputDate.Year,100,DOW_Temp00)TRN(DOW_Temp00,DOW_Century);
+					RC: "For this calculation, the month of March = 1, Dec=10, and Jan/Feb are represented as months 11/12 from the previous year.";
+					N: [GRT(DOW_InputDate.Month,2) SUB(DOW_InputDate.Month,2,DOW_Month) ,LEQ(DOW_InputDate.Month,2) ADD(DOW_InputDate.Month,10,DOW_Month) SUB(DOW_Year,1,DOW_Year) ];
+					RC: "Here The century and 400 year corrections are built into The formula. $N"
+					    "The TRN((2.6 *m) - 0.2) equation relates to the repetitive pattern that the 30-day months show when March is taken as The First month.$N"
+					    "$N"
+					    "Note that the Logix CPU$'s floating point math returns some values slightly different than expected which can change the final results.$N"
+					    "Ex: 12 * 2.6 returns 31.199999 rather than 31.2.  To overcome this issue a value of 0.199999 is used in place of the 0.2 in the original equation.";
+					N: MUL(2.6,DOW_Month,DOW_Temp01)SUB(DOW_Temp01,0.199999,DOW_Temp02)TRN(DOW_Temp02,DOW_Temp03);
+					N: MUL(DOW_Century,2,DOW_Temp04);
+					RC: "Leap Year Adjustment.";
+					N: DIV(DOW_Year,4,DOW_Temp05)TRN(DOW_Temp05,DOW_Temp06);
+					RC: "400 Year Adjustment.";
+					N: DIV(DOW_Century,4,DOW_Temp07)TRN(DOW_Temp07,DOW_Temp08);
+					RC: "Main part of equation... W = (k + floor(2.6m - 0.2) - 2C + Y + floor(Y/4) + floor(C/4)) mod 7$N"
+					    "$N"
+					    "DOW = DOW_Day + TRN((2.6 * DOW_Month) - 0.2) - (2 * DOW_Century) + DOW_Year + TRN(DOW_Year/4) + TRN(DOW_Century/4) MOD 7$N"
+					    "$N"
+					    "DOW_Temp03 =  TRN((2.6 * DOW_Month) - 0.2)$N"
+					    "DOW_Temp04 = (2 * DOW_Century)$N"
+					    "DOW_Temp06 = TRN(DOW_Year/4)$N"
+					    "DOW_Temp08 = TRN(DOW_Century/4)$N"
+					    "$N"
+					    "DOW_Temp14 = (DOW_Day + DOW_Temp03 - DOW_Temp04 + DOW_Year + DOW_Temp06 +  DOW_Temp08) MOD 7$N"
+					    "$N"
+					    "";
+					N: ADD(DOW_Day,DOW_Temp03,DOW_Temp09)SUB(DOW_Temp09,DOW_Temp04,DOW_Temp10)ADD(DOW_Temp10,DOW_Year,DOW_Temp11)ADD(DOW_Temp11,DOW_Temp06,DOW_Temp12)ADD(DOW_Temp12,DOW_Temp08,DOW_Temp13)MOD(DOW_Temp13,7,DOW_Temp14);
+					RC: "MOD operation in some computers differ.  The equation provided in documentation above expects results from the MOD that are different than the actual results that the Logix5000$'s MOD instruction provide for values below the Divisor.  Because of this the logic below makes an adjustment to the the output from the MOD.";
+					N: MOV(DOW_Temp14,DOW_Temp15)LES(DOW_Temp14,0)ADD(DOW_Temp14,7,DOW_Temp15);
+					RC: "Trim off any fractional value to return the day of the week...";
+					N: TRN(DOW_Temp15,DOW_Output)RET(DOW_Output);
+			END_ROUTINE
+
+	END_PROGRAM
+
+	TASK MainTask (Type := CONTINUOUS,
+	               Rate := 10,
+	               Priority := 10,
+	               Watchdog := 500,
+	               DisableUpdateOutputs := No,
+	               InhibitTask := No)
+			MainProgram;
+	END_TASK
+
+CONFIG CST(SystemTimeMasterID := 0) END_CONFIG
+
+CONFIG EthernetNetwork(SupervisorModeEnabled := 0,
+	                                 SupervisorPrecedence := 0,
+	                                 BeaconInterval := 400,
+	                                 BeaconTimeout := 1960,
+	                                 VLANID := 0) END_CONFIG
+
+CONFIG EthernetPort1(PortEnabled := 1,
+	                             AutoNegotiateEnabled := 1) END_CONFIG
+
+CONFIG EthernetPort2(PortEnabled := 1,
+	                             AutoNegotiateEnabled := 1) END_CONFIG
+
+CONFIG InternetProtocol(ConfigType := Manual,
+	                                   IPAddress := "192.168.16.20",
+	                                   SubnetMask := "255.255.255.0",
+	                                   Gateway := "192.168.16.1",
+	                                   PrimaryDNS := "0.0.0.0",
+	                                   SecondaryDNS := "0.0.0.0") END_CONFIG
+
+CONFIG TimeSynchronize(Priority1 := 128,
+	                                 Priority2 := 128,
+	                                 PTPEnable := 0) END_CONFIG
+
+CONFIG WallClockTime(LocalTimeAdjustment := 0,
+	                     TimeZone := 0) END_CONFIG
+
+END_CONTROLLER
+
