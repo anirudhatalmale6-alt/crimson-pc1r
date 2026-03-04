@@ -1,0 +1,240 @@
+============================================================
+  PC1R CRIMSON 3.2 - DISPLAY BUILD GUIDE
+  IO_Summary & Alarm Display Pages
+============================================================
+
+WHAT'S ALREADY DONE IN THE .cd32 FILE:
+- Hardware: CR1000-10000 (800x480 display)
+- Ethernet IP: 192.168.16.30 / Netmask: 255.255.255.0
+- Communications: AB L5k Plus driver
+  PLC1 at 192.168.16.20:44818 (Ethernet/IP)
+- 181 Data Tags imported from PC1R.L5K
+- 3 Display Pages: Main, IO_Summary, Alarm
+- Tags you need are under: PLC1 > Controller_Tags
+
+============================================================
+PART 1: IO_SUMMARY DISPLAY PAGE
+============================================================
+
+RECOMMENDED LAYOUT (800 x 480 screen):
+- Title bar at top: "I/O SUMMARY" (centered, large font)
+- 4 columns across the page, one per I/O module
+- Each I/O point = small indicator (color changes ON/OFF)
+  with label text beside it
+
+STEP-BY-STEP:
+
+1. Double-click "IO_Summary" page in Navigation Pane
+2. Double-click the black canvas to enter Edit mode
+   (Menu bar should show: Mode, Behavior, Text, Data,
+    Transform, Arrange, Organize, Link)
+
+--- ADD TITLE ---
+3. In Resource Pane (right side), click "Primitives" tab
+4. Click "Core Primitives" category to expand it
+5. Find "Text Box" and drag it onto the canvas
+6. Position at top center: roughly (200, 2) to (600, 28)
+7. Press F2 or use Text menu to edit the text
+8. Type: I/O SUMMARY
+9. Set font to something like Hei 14 Bold, White text
+10. Click OK
+
+--- ADD I/O INDICATORS ---
+For each I/O point, you need an INDICATOR from
+the "Indicators" category in the Primitives panel.
+
+The fastest method:
+a) Drag ONE "Indicator" from Primitives > Indicators onto canvas
+b) Right-click it > Properties
+c) On the "Figure" tab, set ON color = Green, OFF color = Red
+d) On the "Text" tab, type the I/O description
+e) On the "More" tab, set position and size
+   (recommended: Width=190, Height=16 for each indicator)
+f) Link it to a data tag:
+   - Click the element, then use Data menu > Add (Ctrl+F2)
+   - Or on the properties Figure tab, set the "Tag" field
+   - Browse to PLC1 > Controller_Tags > [module] > DATA > [bit]
+g) Click OK
+h) Copy this indicator (Ctrl+C), paste (Ctrl+V)
+i) Edit the copy's text and tag link for the next I/O point
+
+============================================================
+I/O TAG MAPPING - EXACT TAGS TO USE
+============================================================
+
+Column 1: OutputModule3 (Slot 3 Outputs) - 15 points
+-----------------------------------------------------------
+Tag Path                        | Description
+PLC1.OutputModule3.DATA.0       | VICES CLOSE SOL
+PLC1.OutputModule3.DATA.1       | WALK BEAM UP SOL
+PLC1.OutputModule3.DATA.2       | WALK BEAM FWD SOL
+PLC1.OutputModule3.DATA.3       | MARK HEAD DOWN SOL
+PLC1.OutputModule3.DATA.4       | MARK HEAD FWD SOL
+PLC1.OutputModule3.DATA.5       | MARK HEAD ROD KICKER
+PLC1.OutputModule3.DATA.6       | COUNT
+PLC1.OutputModule3.DATA.7       | POINT ADVANCE SOL
+PLC1.OutputModule3.DATA.8       | CHAMFER ADV SOL
+PLC1.OutputModule3.DATA.9       | AUTO PILOT LT
+PLC1.OutputModule3.DATA.10      | FAULT PILOT LT
+PLC1.OutputModule3.DATA.11      | BEACON PILOT LT
+PLC1.OutputModule3.DATA.12      | MS1 Point Motor Starter
+PLC1.OutputModule3.DATA.13      | MS2 Chamfer Motor Starter
+PLC1.OutputModule3.DATA.14      | MS3 Coolant Pump Motor Starter
+
+Column 2: InputModule1 (Slot 1 Inputs) - 10 points
+-----------------------------------------------------------
+Tag Path                        | Description
+PLC1.InputModule1.DATA.0        | ESR Emergency Stop Relay
+PLC1.InputModule1.DATA.1        | MS1 MS2 AUX Motor Starters
+PLC1.InputModule1.DATA.2        | AUTO STOP PB
+PLC1.InputModule1.DATA.3        | MS3 AUX Coolant Pump
+PLC1.InputModule1.DATA.4        | Auto/Manual Selector
+PLC1.InputModule1.DATA.5        | AUTO START PB
+PLC1.InputModule1.DATA.6        | POINT MANUAL PB
+PLC1.InputModule1.DATA.7        | CHAMFER MANUAL PB
+PLC1.InputModule1.DATA.8        | VICES CLOSE PB
+PLC1.InputModule1.DATA.9        | VICES OPEN PB
+
+Column 3: InputModule2 (Slot 2 Inputs) - 16 points
+-----------------------------------------------------------
+Tag Path                        | Description
+PLC1.InputModule2.DATA.0        | PROX1 Rod In Position
+PLC1.InputModule2.DATA.1        | PROX2 Rod In Position Mark
+PLC1.InputModule2.DATA.2        | PROX3 Vice 1 Open
+PLC1.InputModule2.DATA.3        | VICES CLOSED PROXES
+PLC1.InputModule2.DATA.4        | PROX4 Vice 2 Open
+PLC1.InputModule2.DATA.5        | RESET PB ESR/Fault Reset
+PLC1.InputModule2.DATA.6        | LS1 Point Depth LS
+PLC1.InputModule2.DATA.7        | COOLANT ON SW
+PLC1.InputModule2.DATA.8        | LS3 Chamfer Depth LS
+PLC1.InputModule2.DATA.9        | HEADS ON SW
+PLC1.InputModule2.DATA.10       | INDEX PB
+PLC1.InputModule2.DATA.11       | LS5 Mark Head Home LS
+PLC1.InputModule2.DATA.12       | LS6 Mark Head Not Up LS
+PLC1.InputModule2.DATA.13       | SW2 P&C ONLY
+PLC1.InputModule2.DATA.14       | SW2 STAMP ONLY
+PLC1.InputModule2.DATA.15       | STAMP PB
+
+Column 4: InputModule4 (Slot 4 Inputs) - 8 points
+-----------------------------------------------------------
+Tag Path                        | Description
+PLC1.InputModule4.DATA.0        | BEAM1 UP FB
+PLC1.InputModule4.DATA.1        | BEAM1 DOWN FB
+PLC1.InputModule4.DATA.2        | BEAM1 FWD FB
+PLC1.InputModule4.DATA.3        | BEAM1 HOME FB
+PLC1.InputModule4.DATA.4        | BEAM2 UP FB
+PLC1.InputModule4.DATA.5        | BEAM2 DOWN FB
+PLC1.InputModule4.DATA.6        | BEAM2 FWD FB
+PLC1.InputModule4.DATA.7        | BEAM2 HOME FB
+
+
+============================================================
+PART 2: ALARM DISPLAY PAGE
+============================================================
+
+RECOMMENDED LAYOUT:
+- Title at top: "ALARM FAULTS"
+- Single column list, or 2 columns
+- Each alarm = indicator that turns RED when fault is active
+- Use "Indicators" from Primitives panel
+
+--- STEP-BY-STEP ---
+1. Double-click "Alarm" page in Navigation Pane
+2. Double-click canvas to enter Edit mode
+3. Add title text "ALARM FAULTS" at top
+4. For each alarm, drag an Indicator from Primitives
+5. Set ON color = RED, OFF color = dark gray or green
+6. Link to the N7 bit tag as shown below
+
+============================================================
+ALARM TAG MAPPING - EXACT TAGS TO USE
+============================================================
+
+N7[0] Alarm Bits:
+-----------------------------------------------------------
+Tag Path              | Description
+PLC1.N7[0].0          | VICE FAIL 2 CLOSE
+PLC1.N7[0].1          | Point/Chamfer Motor Overload (MS1/MS2 TRIP)
+PLC1.N7[0].3          | Coolant Overload Starter Fail (MS3)
+PLC1.N7[0].4          | VICE1 FAIL 2 OPEN
+PLC1.N7[0].5          | Stamp Not Home
+PLC1.N7[0].6          | Stamp Down
+PLC1.N7[0].7          | Beam 1 Not Down
+PLC1.N7[0].8          | Beam 2 Not Down
+PLC1.N7[0].9          | Beam 1 Up
+PLC1.N7[0].10         | Beam 2 Up
+PLC1.N7[0].11         | Beam 1 Not Down
+PLC1.N7[0].12         | Beam 2 Not Down
+PLC1.N7[0].13         | Beam 1 Not Up
+PLC1.N7[0].14         | Beam 2 Not Up
+PLC1.N7[0].15         | Beam 1 Not Home
+
+NOTE: N7[0].2 is NOT USED (skip it)
+
+N7[1] Alarm Bits:
+-----------------------------------------------------------
+Tag Path              | Description
+PLC1.N7[1].0          | Beam 2 Not Home
+PLC1.N7[1].1          | Beam 1 Forward
+PLC1.N7[1].2          | Beam 2 Forward
+PLC1.N7[1].3          | Beam 1 Not Forward
+PLC1.N7[1].4          | Beam 2 Not Forward
+PLC1.N7[1].5          | Beam 1 Home
+PLC1.N7[1].6          | Beam 2 Home
+PLC1.N7[1].7          | No Rods
+PLC1.N7[1].8          | VICE2 FAIL 2 OPEN
+
+Total: 24 alarm faults
+
+
+============================================================
+QUICK INDICATOR SETUP (FASTEST METHOD)
+============================================================
+
+1. Open Primitives tab in Resource Pane (right panel)
+2. Click "Indicators" category
+3. Drag any indicator style onto the canvas
+4. Right-click the indicator > Properties
+5. TEXT tab:
+   - Type the description (e.g., "VICES CLOSE SOL")
+   - Set font size small enough to fit (Hei 8 or 10)
+   - Text Color: White
+6. FIGURE tab:
+   - This is where you set the ON/OFF colors
+   - For I/O: ON=Green, OFF=Dark Gray
+   - For Alarms: ON=Red, OFF=Dark Gray
+   - TAG field: browse to the correct PLC1 tag path
+7. MORE tab:
+   - Set exact position (X, Y) and size (Width, Height)
+   - Recommended size: W=190, H=16 per indicator
+8. Click OK
+
+COPY SHORTCUT:
+- After setting up one indicator perfectly, Ctrl+C to copy
+- Ctrl+V to paste a copy
+- Move it below the first one
+- Right-click > Properties to change just the text and tag
+- This is MUCH faster than creating each from scratch
+
+============================================================
+NAVIGATION BUTTONS (OPTIONAL)
+============================================================
+
+Add buttons to switch between pages:
+1. On IO_Summary, add a button labeled "Alarm"
+   - Action: Go to Page > Alarm
+2. On IO_Summary, add a button labeled "Main"
+   - Action: Go to Page > Main
+3. Similarly on the Alarm page
+4. And on Main page
+
+============================================================
+SAVE AND DOWNLOAD
+============================================================
+
+After completing the displays:
+1. File > Save (Ctrl+S)
+2. File > Download to Panel (when connected to the HMI)
+   - Or use File > Compile to verify no errors first
+
+============================================================
